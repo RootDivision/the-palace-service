@@ -27,6 +27,13 @@ export const itemSchema = {
 
 export const addItemSchema = {
   schema: {
+    body: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: { type: "string" },
+      },
+    },
     response: {
       201: { ...item },
     },

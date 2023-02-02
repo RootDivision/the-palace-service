@@ -27,7 +27,7 @@ const addItem = (
   const { name } = req.body;
   const item = { id: uuid(), name: name };
 
-  reply.send(item);
+  reply.code(201).send(item);
 };
 
 export default {
