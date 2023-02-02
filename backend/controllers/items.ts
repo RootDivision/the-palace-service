@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { uuid } from "uuidv4";
 
 import { items } from "../../data";
 
@@ -19,7 +20,18 @@ const getItem = (
   reply.send(item);
 };
 
+const addItem = (
+  req: FastifyRequest<{ Body: { name: string } }>,
+  reply: FastifyReply
+) => {
+  const { name } = req.body;
+  const item = { id: uuid(), name: name };
+
+  reply.send(item);
+};
+
 export default {
+  addItem,
   getItem,
   getItems,
 };
