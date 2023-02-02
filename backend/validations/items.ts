@@ -39,3 +39,29 @@ export const addItemSchema = {
     },
   },
 };
+
+export const deleteItemSchema = {
+  schema: {
+    response: {
+      200: {
+        type: "object",
+        properties: {
+          message: { type: "string" },
+        },
+      },
+    },
+  },
+};
+
+export const updateItemSchema = {
+  schema: {
+    response: {
+      200: {
+        type: "object",
+        properties: {
+          message: { type: "string" },
+        },
+      },
+    },
+  },
+};

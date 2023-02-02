@@ -27,11 +27,40 @@ const addItem = (
   const { name } = req.body;
   const item = { id: uuid(), name: name };
 
+  //add the item to the database
   reply.code(201).send(item);
+};
+
+const deleteItem = (
+  req: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) => {
+  const { id } = req.params;
+
+  //delete the item from the database
+  reply.send({ message: `Item ${id} has been removed` });
+};
+
+const updateItem = (
+  req: FastifyRequest<{
+    Params: { id: string };
+    Body: {
+      name: string;
+    };
+  }>,
+  reply: FastifyReply
+) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  //update the item from the database
+  reply.send({ message: `Item updated` });
 };
 
 export default {
   addItem,
+  deleteItem,
   getItem,
   getItems,
+  updateItem,
 };
