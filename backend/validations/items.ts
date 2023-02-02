@@ -1,4 +1,4 @@
-const validateItems = {
+export const itemsSchema = {
   schema: {
     response: {
       200: {
@@ -15,7 +15,7 @@ const validateItems = {
   },
 };
 
-const validateItem = {
+export const itemSchema = {
   schema: {
     response: {
       200: {
@@ -27,9 +27,4 @@ const validateItem = {
       },
     },
   },
-};
-
-export default {
-  validateItem,
-  validateItems,
 };

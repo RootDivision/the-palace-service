@@ -1,18 +1,20 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import {items} from "../data";
+import { items } from "../../data";
 
-const getItems = async (req: FastifyRequest, reply: FastifyReply) => {
-  await reply.send(items);
+const getItems = (req: FastifyRequest, reply: FastifyReply) => {
+  reply.send(items);
 };
 
-const getItem = async (
+const getItem = (
   req: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
 ) => {
-  const id = req.params.id;
+  const {
+    params: { id },
+  } = req;
+
   const item = items.find((item) => item.id === id);
-  console.log("item: ", item);
 
   reply.send(item);
 };

@@ -1,15 +1,18 @@
 import fastify, { FastifyInstance } from "fastify";
 
-import itemRoutes from "./routes/items";
+import itemRoutes from "./backend/routes/items";
 
 const app: FastifyInstance = fastify({ logger: true });
 
 app.register(itemRoutes);
 
-app.listen({ port: 8080 }, (err, address) => {
-  if (err) {
+const start = async () => {
+  try {
+    await app.listen({ port: 8080 });
+  } catch (err) {
     app.log.error(err);
     process.exit(1);
   }
-  app.log.info(`Server listening at ${address}`);
-});
+};
+
+start();
