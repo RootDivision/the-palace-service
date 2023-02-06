@@ -1,10 +1,29 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { uuid } from "uuidv4";
 
+import itemService from "../services/items";
+
 import { items } from "../../data";
 
-const getItems = (req: FastifyRequest, reply: FastifyReply) => {
-  reply.send(items);
+const getItems = async (req: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const items = await itemService.getItems();
+    console.log("items: ", items);
+    reply.send(items);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const addItem = (
+  req: FastifyRequest<{ Body: { name: string } }>,
+  reply: FastifyReply
+) => {
+  const { name } = req.body;
+  const item = { id: uuid(), name: name };
+
+  //add the item to the database
+  reply.code(201).send(item);
 };
 
 const getItem = (
@@ -18,17 +37,6 @@ const getItem = (
   const item = items.find((item) => item.id === id);
 
   reply.send(item);
-};
-
-const addItem = (
-  req: FastifyRequest<{ Body: { name: string } }>,
-  reply: FastifyReply
-) => {
-  const { name } = req.body;
-  const item = { id: uuid(), name: name };
-
-  //add the item to the database
-  reply.code(201).send(item);
 };
 
 const deleteItem = (

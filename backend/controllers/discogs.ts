@@ -1,15 +1,17 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import discogsService from "../services/discogs";
+import query from "../../prisma/query";
+import prisma from "../../prisma/client";
+
+// import discogsService from "../services/discogs";
+// const result = await discogsService.fetchDiscogsCollection();
 
 const sync = async (req: FastifyRequest, reply: FastifyReply) => {
-  //do a call to the discogs service, which calls the discogs API
-  // sync the logic here
-  // store it in the localdatabase
   try {
-    
-    const result = await discogsService.fetchDiscogsCollection();
-    console.log("result: ", result);
+
+
+
+
   } catch (err) {
     console.log(err);
   }
