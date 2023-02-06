@@ -6,12 +6,14 @@ const item = {
   },
 };
 
-export const itemsSchema = {
+export const releasesSchema = {
   schema: {
     response: {
       200: {
-        type: "array",
-        items: { ...item },
+        type: "object",
+        properties: {
+          releases: { type: "array" },
+        },
       },
     },
   },
@@ -25,13 +27,14 @@ export const itemSchema = {
   },
 };
 
-export const addItemSchema = {
+export const addReleaseSchema = {
   schema: {
     body: {
       type: "object",
-      required: ["name"],
+      required: ["data"],
       properties: {
-        name: { type: "string" },
+        id: { type: "string" },
+        releaseId: { type: "string" },
       },
     },
     response: {

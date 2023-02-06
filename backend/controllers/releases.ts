@@ -1,29 +1,34 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { uuid } from "uuidv4";
 
-import itemService from "../services/items";
+import itemService from "../services/releases";
 
 import { items } from "../../data";
 
-const getItems = async (req: FastifyRequest, reply: FastifyReply) => {
+const getReleases = async (req: FastifyRequest, reply: FastifyReply) => {
   try {
-    const items = await itemService.getItems();
-    console.log("items: ", items);
-    reply.send(items);
+    const releases = await itemService.getReleases();
+    console.log('releases: ', releases);
+    reply.send({
+      releases,
+    });
   } catch (err) {
-    console.log(err);
+    reply.send(err);
   }
 };
 
-const addItem = (
-  req: FastifyRequest<{ Body: { name: string } }>,
+const addRelease = async (
+  req: FastifyRequest<{ Body: { data: {} } }>,
   reply: FastifyReply
 ) => {
-  const { name } = req.body;
-  const item = { id: uuid(), name: name };
+  const { data } = req.body;
 
-  //add the item to the database
-  reply.code(201).send(item);
+  try {
+    await itemService.addRelease({ data: { ...data } });
+    reply.code(201).send("release added");
+  } catch (err) {
+    reply.send(err);
+  }
 };
 
 const getItem = (
@@ -66,9 +71,9 @@ const updateItem = (
 };
 
 export default {
-  addItem,
+  addRelease,
+  getReleases,
   deleteItem,
   getItem,
-  getItems,
   updateItem,
 };

@@ -1,12 +1,11 @@
-import { PrismaPromise } from "@prisma/client";
+import { PrismaPromise, Release } from "@prisma/client";
+
 import prisma from "./client";
 
-const query = async (query: () => PrismaPromise<{}>) => {
+const query = async (query: PrismaPromise<Release | Release[]>) => {
   try {
     prisma.$connect();
-    const response = await query();
-
-    return response;
+    return query;
   } catch (error) {
     console.error(error);
   } finally {

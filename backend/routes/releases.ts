@@ -1,17 +1,18 @@
 import { FastifyInstance } from "fastify";
-import itemController from "../controllers/items";
+import itemController from "../controllers/releases";
 import {
-  addItemSchema,
+  addReleaseSchema,
+  releasesSchema,
   deleteItemSchema,
   itemSchema,
-  itemsSchema,
   updateItemSchema,
-} from "../validations/items";
+} from "../validations/releases";
 
 const itemRoutes = async (app: FastifyInstance) => {
-  app.get("/items", itemsSchema, itemController.getItems);
+  app.post("/release", addReleaseSchema, itemController.addRelease);
+  app.get("/releases", releasesSchema, itemController.getReleases);
+
   app.get("/item/:id", itemSchema, itemController.getItem);
-  app.post("/item", addItemSchema, itemController.addItem);
   app.delete("/item/:id", deleteItemSchema, itemController.deleteItem);
   app.put("/item/:id", updateItemSchema, itemController.updateItem);
 };

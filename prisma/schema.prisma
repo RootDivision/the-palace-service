@@ -10,7 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Item {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
+model Release {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  releaseId String @unique
+  title     String
 }
