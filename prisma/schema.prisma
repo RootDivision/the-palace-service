@@ -11,7 +11,8 @@ datasource db {
 }
 
 model Release {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  releaseId String @unique
-  title     String
+  id          Int      @id @map("_id")
+  instance_id Int
+  date_added  DateTime
+  rating      Int
 }

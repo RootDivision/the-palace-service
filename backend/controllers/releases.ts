@@ -1,17 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { uuid } from "uuidv4";
 
-import itemService from "../services/releases";
+import releaseService from "../services/releases";
 
 import { items } from "../../data";
 
 const getReleases = async (req: FastifyRequest, reply: FastifyReply) => {
   try {
-    const releases = await itemService.getReleases();
-    console.log('releases: ', releases);
-    reply.send({
-      releases,
-    });
+    const releases = await releaseService.getReleases();
+    reply.send({ releases });
   } catch (err) {
     reply.send(err);
   }
@@ -24,7 +21,7 @@ const addRelease = async (
   const { data } = req.body;
 
   try {
-    await itemService.addRelease({ data: { ...data } });
+    await releaseService.addRelease({ data: { ...data } });
     reply.code(201).send("release added");
   } catch (err) {
     reply.send(err);

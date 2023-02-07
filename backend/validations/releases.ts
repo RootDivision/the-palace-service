@@ -34,7 +34,10 @@ export const addReleaseSchema = {
       required: ["data"],
       properties: {
         id: { type: "string" },
-        releaseId: { type: "string" },
+        release_id: { type: "number" },
+        instance_id: { type: "number" },
+        date_added: { type: "string" },
+        rating: { type: "number" },
       },
     },
     response: {
