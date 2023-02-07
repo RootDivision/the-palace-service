@@ -1,67 +1,51 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+
+import { parseReleaseForSave } from "../utils/utils";
 import discogsService from "../services/discogs";
 import releaseService from "../services/releases";
 
-const params = {
-  token: "OwixZEStNCoDmzXIUbFuWGwboAemYPllalZiiYtT",
-  // page: 1,
-  per_page: 200,
-  sort: "added",
-  sort_order: "desc",
-};
+const catchupSync = async (req: FastifyRequest, reply: FastifyReply) => {
+  const { per_page, sort, sort_order } = req.query;
 
-const sync = async (req: FastifyRequest, reply: FastifyReply) => {
+  let discogsReleases: any = [];
+  let dbReleases: any = [];
+  let hasNext = true;
+  let page = 0;
+
   try {
-    let results: any[] = [];
-    let next = true;
-    let page = 0;
+    dbReleases = await releaseService.getReleases();
 
-    while (next) {
+    while (hasNext) {
       page += 1;
       const { pagination, releases } =
         await discogsService.fetchDiscogsCollection({
-          params: { ...params, page },
+          params: { page, per_page, sort, sort_order },
         });
-      console.log("page: ", page);
-      results = results.concat(releases);
-      console.log("results: ", results.length);
-      next = page < pagination.pages;
-
-      console.log(next);
+      discogsReleases = [...discogsReleases, ...releases];
+      hasNext = page < pagination.pages;
+      console.log(`Syncing ${page} of ${pagination.pages}`);
     }
 
-    // const mapped = results.map(({ id, instance_id, date_added, rating }) => ({
-    //   id,
-    //   // instance_id,
-    //   // date_added,
-    //   // rating,
-    // }));
-    const mapped = results.map(({ id, instance_id, date_added, rating }) => id);
+    const newReleases = parseReleaseForSave(discogsReleases, dbReleases);
 
+    if (newReleases.length <= 0) {
+      reply.send({ message: "No items to sync" });
+      return;
+    }
 
-    
-    const toFindDuplicates = mapped => mapped.filter((item, index) => mapped.indexOf(item) !== index)
-    const duplicateElements = toFindDuplicates(mapped);
-    console.log(duplicateElements);
-
-
-    
-    // console.log(mapped);
-
-    // releaseService.addReleases({
-    //   data: [...mapped],
-    // });
-
-    reply.send(duplicateElements);
-    // reply.send({
-    //   message: `sync completed`,
-    //   releases: results,
-    // });
+    await releaseService.addReleases({ data: newReleases });
+    reply.send({ message: "New items added", newReleases });
   } catch (err) {
-    console.log(err);
+    reply.send(err);
   }
 };
 
+const resetSync = async (req: FastifyRequest, reply: FastifyReply) => {
+  // todo
+  reply.send("ResetSync");
+};
+
 export default {
-  sync,
+  catchupSync,
+  resetSync,
 };
