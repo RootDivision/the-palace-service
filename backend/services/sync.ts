@@ -1,4 +1,4 @@
-import { discogsConfig } from "../../backend/config";
+import { discogsConfig } from "../config";
 
 interface Params {
   page: number;

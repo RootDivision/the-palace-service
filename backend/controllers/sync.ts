@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
 import { parseReleaseForSave } from "../utils/utils";
-import discogsService from "../services/discogs";
+import syncService from "../services/sync";
 import releaseService from "../services/releases";
 
 const catchupSync = async (req: FastifyRequest, reply: FastifyReply) => {
@@ -17,10 +17,9 @@ const catchupSync = async (req: FastifyRequest, reply: FastifyReply) => {
 
     while (hasNext) {
       page += 1;
-      const { pagination, releases } =
-        await discogsService.fetchDiscogsCollection({
-          params: { page, per_page, sort, sort_order },
-        });
+      const { pagination, releases } = await syncService.fetchDiscogsCollection(
+        { params: { page, per_page, sort, sort_order } }
+      );
       discogsReleases = [...discogsReleases, ...releases];
       hasNext = page < pagination.pages;
       console.log(`Syncing ${page} of ${pagination.pages}`);

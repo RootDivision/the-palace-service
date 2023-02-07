@@ -3,7 +3,7 @@ import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 
 import releaseRoutes from "./backend/routes/releases";
-import discogsRoutes from "./backend/routes/discogs";
+import syncRoutes from "./backend/routes/sync";
 
 const app: FastifyInstance = fastify({ logger: true });
 
@@ -11,7 +11,7 @@ app.register(swagger);
 app.register(swaggerUI, { routePrefix: "/docs" });
 
 app.register(releaseRoutes);
-app.register(discogsRoutes);
+app.register(syncRoutes);
 
 const start = async () => {
   try {
